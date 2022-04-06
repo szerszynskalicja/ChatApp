@@ -7,21 +7,13 @@ class Widget(QWidget):
         self._create_form()
 
     def _create_form(self):
-        outerLayout = QVBoxLayout()
-        # layout = QFormLayout()
-        # layout.addRow("Message", QLineEdit())
-        # outer_layout.addLayout(layout)
-
-        topLayout = QFormLayout()
-        # Add a label and a line edit to the form layout
-        topLayout.addRow("Some Text:", QLineEdit())
-        # Create a layout for the checkboxes
-        optionsLayout = QVBoxLayout()
-        # Add some checkboxes to the layout
-        optionsLayout.addWidget(QCheckBox("Option one"))
-        optionsLayout.addWidget(QCheckBox("Option two"))
-        optionsLayout.addWidget(QCheckBox("Option three"))
-        # Nest the inner layouts into the outer layout
-        outerLayout.addLayout(topLayout)
-        outerLayout.addLayout(optionsLayout)
-        self.setLayout(outerLayout)
+        outer_layout = QVBoxLayout()
+        top_layout = QFormLayout()
+        top_layout.addRow("Message", QLineEdit())
+        outer_layout.addLayout(top_layout)
+        options_layout = QVBoxLayout()
+        options_layout.addWidget(QCheckBox("CBC"))
+        options_layout.addWidget(QCheckBox("EBC"))
+        outer_layout.addLayout(top_layout)
+        outer_layout.addLayout(options_layout)
+        self.setLayout(outer_layout)
