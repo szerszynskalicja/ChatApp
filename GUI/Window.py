@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QMainWindow, QLabel, QMenuBar, QMenu, QFormLayout, QLineEdit, QVBoxLayout, QCheckBox,
-                             QStatusBar)
+                             QStatusBar, QProgressBar)
 
 from ChatApp.GUI.Widget import Widget
 
@@ -13,14 +13,9 @@ class Window(QMainWindow):
         self._create_menu_bar()
         self._widget = Widget(self)
         self.setCentralWidget(self._widget)
-        self._create_status_bar()
 
     def _create_menu_bar(self):
         menu_bar = QMenuBar(self)
         self.setMenuBar(menu_bar)
         help_menu = menu_bar.addMenu("&Help")
 
-    def _create_status_bar(self):
-        status = QStatusBar()
-        status.showMessage("Status Bar")
-        self.setStatusBar(status)
