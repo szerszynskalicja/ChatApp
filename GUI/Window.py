@@ -2,7 +2,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QMainWindow, QLabel, QMenuBar, QMenu, QFormLayout, QLineEdit, QVBoxLayout, QCheckBox,
                              QStatusBar, QProgressBar)
 
-from ChatApp.GUI.Widget import Widget
+from GUI.Widget import Widget
 
 
 class Window(QMainWindow):

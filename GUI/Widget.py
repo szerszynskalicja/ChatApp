@@ -23,6 +23,7 @@ class Widget(QWidget):
         button_cbc = QRadioButton("CBC")
         button_cbc.toggled.connect(lambda: self._send_type(button_cbc))
         options_layout.addWidget(button_cbc)
+        button_cbc.setChecked(True)
         button_ebc = QRadioButton("EBC")
         button_ebc.toggled.connect(lambda: self._send_type(button_ebc))
         options_layout.addWidget(button_ebc)
@@ -35,7 +36,13 @@ class Widget(QWidget):
     def __browse_file(self):
         file_path = os.path.abspath(os.getcwd())
         file_window = QFileDialog.getOpenFileName(self, "Open File", file_path, 'Images (*.png *.jpg);;Text files (*.txt *.pdf);; Videos (*.avi)')
+        previous_path = self.file_path
         self.file_path = file_window[0]
+        if self.file_path:
+            if previous_path:
+                self.text_box.append("Changed file to: " + self.file_path)
+            else:
+                self.text_box.append("You have chosen: " + self.file_path + " file")
 
     def __create_message_form(self):
         top_layout = QFormLayout()
@@ -56,13 +63,16 @@ class Widget(QWidget):
         self.outer_layout.addWidget(btns)
 
     def send_mess(self):
-        if self.type == "CBC" or self.type == "EBC":
+        # message or text to sent is chosen
+        if self.message.text() or self.file_path:
             self.__progress_bar_actualization()
-            self.text_box.append("you: "+self.message.text())
-            if self.file_path != "":
-                self.text_box.append("you: added a file "+str(self.file_path))
+            if self.message.text():
+                self.text_box.append("you: "+self.message.text())
+            if self.file_path:
+                self.text_box.append("you: send a file " + str(self.file_path))
+                self.file_path = ""
         else:
-            print("Error")
+            self.text_box.append("Please choose a file or message to send")
 
     def _send_type(self, button):
         if button.isChecked():
