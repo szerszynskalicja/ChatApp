@@ -1,11 +1,11 @@
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import (QMainWindow, QLabel, QMenuBar, QMenu, QFormLayout, QLineEdit, QVBoxLayout, QCheckBox,
-                             QStatusBar, QProgressBar)
+from PyQt5 import QtCore
+from PyQt5.QtWidgets import (QMainWindow, QLabel, QMenuBar)
 
 from GUI.Widget import Widget
 
 
 class Window(QMainWindow):
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Chat App")
@@ -18,4 +18,5 @@ class Window(QMainWindow):
         menu_bar = QMenuBar(self)
         self.setMenuBar(menu_bar)
         help_menu = menu_bar.addMenu("&Help")
+
 

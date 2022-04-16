@@ -1,11 +1,11 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QFormLayout, QLineEdit, QRadioButton, QDialogButtonBox, \
     QPushButton, QTextEdit, QFileDialog, QProgressBar
 import os
-
+import time
 
 class Widget(QWidget):
     def __init__(self, parent=None):
-        super(Widget, self).__init__(parent)
+        super().__init__()
         self.outer_layout = QVBoxLayout()
         self._create_form()
         self._create_enter_buttons()

@@ -1,9 +1,5 @@
-import time
-from PyQt5.QtWidgets import QWidget, QGridLayout, QMessageBox,QLabel,QVBoxLayout, QFormLayout, QLineEdit, QRadioButton, QDialogButtonBox, \
-    QPushButton, QTextEdit, QFileDialog, QProgressBar
+from PyQt5.QtWidgets import QWidget, QGridLayout, QMessageBox, QLineEdit,  QPushButton
 import os
-
-import GUI.Window as mainGUI
 import Server
 
 
@@ -15,7 +11,7 @@ class GenKeyWidget(QWidget):
         self.setLayout(self.layout)
 
     def _create_widgets(self):
-        if os.path.isfile('./privateKey.pem') and os.path.isfile('./publicKey.pem'):
+        if os.path.isfile('./privateKey.key') and os.path.isfile('./publicKey.key'):
             self.lineEdit_password = QLineEdit()
             self.lineEdit_password.setPlaceholderText('Please enter your Password')
             self.layout.addWidget(self.lineEdit_password, 0, 0)
@@ -36,18 +32,15 @@ class GenKeyWidget(QWidget):
 
     def _check_password(self):
         if self.lineEdit_password.text() == self.lineEdit_password2.text():
-            self.logged = True
             Server.create_keys(self.lineEdit_password.text())
             # switch to message window
-            print("switch")
-            window = mainGUI.Window()
-            window.show()
-            self.close()
+            self.window().hide()
+
         else:
-            self.logged = False
             msg = QMessageBox()
             msg.setText('Passwords are not the same, try again!')
             msg.exec_()
 
     def _login(self):
-        self.logged = Server.check_password(self.lineEdit_password)
+        Server.check_password(self.lineEdit_password.text())
+        self.window().hide()
