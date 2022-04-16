@@ -1,4 +1,3 @@
-import time
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QFormLayout, QLineEdit, QRadioButton, QDialogButtonBox, \
     QPushButton, QTextEdit, QFileDialog, QProgressBar
 import os
