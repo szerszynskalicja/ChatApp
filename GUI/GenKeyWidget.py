@@ -8,6 +8,7 @@ class GenKeyWidget(QWidget):
         super().__init__()
         self.layout = QGridLayout()
         self._create_widgets()
+        self.parent = parent
         self.setLayout(self.layout)
 
     def _create_widgets(self):
@@ -34,8 +35,8 @@ class GenKeyWidget(QWidget):
         if self.lineEdit_password.text() == self.lineEdit_password2.text():
             Server.create_keys(self.lineEdit_password.text())
             # switch to message window
-            self.window().hide()
-
+            #self.window().hide()
+            self.parent.create_widget()
         else:
             msg = QMessageBox()
             msg.setText('Passwords are not the same, try again!')
@@ -43,4 +44,5 @@ class GenKeyWidget(QWidget):
 
     def _login(self):
         Server.check_password(self.lineEdit_password.text())
-        self.window().hide()
+        #self.window().hide()
+        self.parent.create_widget()
