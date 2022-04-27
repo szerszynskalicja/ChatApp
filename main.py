@@ -6,6 +6,7 @@ import GUI.Window as mainW
 
 PUBLIC_KEY = None
 PRIVATE_KEY = None
+SESSION_KEY = None
 
 if __name__ == '__main__':
     app = QtW.QApplication(sys.argv)

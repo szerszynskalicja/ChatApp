@@ -3,6 +3,9 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QFormLayout, QLineEdit, QRadio
 import os
 import time
 
+import Server
+
+
 class Widget(QWidget):
     def __init__(self, parent=None):
         super().__init__()
@@ -47,7 +50,7 @@ class Widget(QWidget):
         top_layout = QFormLayout()
         self.text_box = QTextEdit()
         self.text_box.setReadOnly(True)
-        self.text_box.append("cos")
+        self.text_box.append("message")
         top_layout.addWidget(self.text_box)
         self.message = QLineEdit()
         top_layout.addRow("Message", self.message)
@@ -67,6 +70,7 @@ class Widget(QWidget):
             self.__progress_bar_actualization()
             if self.message.text():
                 self.text_box.append("you: "+self.message.text())
+                Server.send_message(bytes(self.message), self.type)
             if self.file_path:
                 self.text_box.append("you: send a file " + str(self.file_path))
                 self.file_path = ""

@@ -22,18 +22,35 @@ def create_keys(password):
 
 
 def AES_encrypt(message, key, mode):
-    iv = Random.new().read(AES.block_size)
     plaintext = pad(message, AES.block_size)
-    cipher = AES.new(key, mode, iv)
-    return iv + cipher.encrypt(plaintext)
+    if mode == AES.MODE_ECB:
+        cipher = AES.new(key, mode)
+        return cipher
+    else:
+        iv = Random.new().read(AES.block_size)
+        cipher = AES.new(key, mode, iv)
+        return iv + cipher.encrypt(plaintext)
 
 
 def AES_decrypt(ciphertext, key, mode):
-    cipher = AES.new(key, mode, ciphertext[:AES.block_size])
-    print(ciphertext[:AES.block_size])
-    plaintext = cipher.decrypt(ciphertext[AES.block_size:])
+    if mode == AES.MODE_ECB:
+        cipher = AES.new(key, mode, ciphertext[:AES.block_size])
+        plaintext = cipher.decrypt(ciphertext[AES.block_size:])
+    else:
+        cipher = AES.new(key, mode)
+        plaintext = cipher.decrypt(ciphertext)
     return unpad(plaintext, AES.block_size)
 
+def generate_session_key():
+    main.SESSION_KEY = Random.get_random_bytes(AES.block_size)
+
+def send_message(message, mode):
+    if mode == "CBC":
+        message_encrypted = AES_encrypt(message, main.SESSION_KEY, AES.MODE_CBC)
+        iv = message_encrypted[:AES.block_size]
+    else:
+        message_encrypted = AES_encrypt(message, main.SESSION_KEY, AES.MODE_EBC)
+    #logic with message sending TODO
 
 def check_password(password):
     hashed_password = hashlib.sha256(bytes(password, "utf-8")).digest()
