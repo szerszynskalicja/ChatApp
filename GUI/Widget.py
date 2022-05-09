@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QFormLayout, QLineEdit, QRadio
     QPushButton, QTextEdit, QFileDialog, QProgressBar
 import os
 import time
-
+import Client
 import Logic
 
 
@@ -11,6 +11,7 @@ class Widget(QWidget):
         super().__init__()
         self.outer_layout = QVBoxLayout()
         self._create_form()
+        self.client = Client.Client(self)
         self._create_enter_buttons()
         self.__create_progress_bar()
         self.setLayout(self.outer_layout)
@@ -70,7 +71,8 @@ class Widget(QWidget):
             self.__progress_bar_actualization()
             if self.message.text():
                 self.text_box.append("you: "+self.message.text())
-                Logic.send_message(bytes(self.message, "utf-8"), self.type)
+                #Logic.send_message(bytes(self.message, "utf-8"), self.type)
+                self.client.send(self.message.text())
             if self.file_path:
                 self.text_box.append("you: send a file " + str(self.file_path))
                 self.file_path = ""
