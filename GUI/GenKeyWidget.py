@@ -4,11 +4,12 @@ import Logic
 
 
 class GenKeyWidget(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, client=None):
         super().__init__()
         self.layout = QGridLayout()
         self._create_widgets()
         self.parent = parent
+        self.client = client
         self.setLayout(self.layout)
 
     def _create_widgets(self):
@@ -36,7 +37,7 @@ class GenKeyWidget(QWidget):
             Logic.create_keys(self.lineEdit_password.text())
             # switch to message window
             #self.window().hide()
-            self.parent.create_widget()
+            self.parent.create_s_c_widget()
         else:
             msg = QMessageBox()
             msg.setText('Passwords are not the same, try again!')
@@ -45,4 +46,4 @@ class GenKeyWidget(QWidget):
     def _login(self):
         Logic.check_password(self.lineEdit_password.text())
         #self.window().hide()
-        self.parent.create_widget()
+        self.parent.create_s_c_widget()

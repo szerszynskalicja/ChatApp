@@ -2,16 +2,18 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QFormLayout, QLineEdit, QRadio
     QPushButton, QTextEdit, QFileDialog, QProgressBar
 import os
 import time
-import Client
+
 import Logic
 
 
 class Widget(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, client=None):
         super().__init__()
         self.outer_layout = QVBoxLayout()
         self._create_form()
-        self.client = Client.Client(self)
+        self.client = client
+        self.client.set_widget(self)
+        self.client.run()
         self._create_enter_buttons()
         self.__create_progress_bar()
         self.setLayout(self.outer_layout)

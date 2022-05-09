@@ -1,10 +1,8 @@
 import socket
 import threading
-from GUI import Widget
 
 
 class Client:
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def receive(self):
         while True:
@@ -17,9 +15,14 @@ class Client:
     def send(self, message):
         self.sock.send(bytes(message, 'utf-8'))
 
-    def __init__(self, widget):
+    def __init__(self):
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.widget = None
+
+    def set_widget(self, widget):
         self.widget = widget
-        self.sock.connect((socket.gethostbyname(socket.gethostname()), 10000))
+
+    def run(self):
         recThread = threading.Thread(target=self.receive)
         recThread.start()
 
