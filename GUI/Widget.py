@@ -73,7 +73,7 @@ class Widget(QWidget):
             self.__progress_bar_actualization()
             if self.message.text():
                 self.text_box.append("you: "+self.message.text())
-                #Logic.send_message(bytes(self.message, "utf-8"), self.type)
+                #Logic.send_message(bytes(self.message, "utf-8"), self.type, self.client)
                 self.client.send(self.message.text())
             if self.file_path:
                 self.text_box.append("you: send a file " + str(self.file_path))
