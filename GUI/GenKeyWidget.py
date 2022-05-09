@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QGridLayout, QMessageBox, QLineEdit,  QPushButton
 import os
-import Server
+import Logic
 
 
 class GenKeyWidget(QWidget):
@@ -33,7 +33,7 @@ class GenKeyWidget(QWidget):
 
     def _check_password(self):
         if self.lineEdit_password.text() == self.lineEdit_password2.text():
-            Server.create_keys(self.lineEdit_password.text())
+            Logic.create_keys(self.lineEdit_password.text())
             # switch to message window
             #self.window().hide()
             self.parent.create_widget()
@@ -43,6 +43,6 @@ class GenKeyWidget(QWidget):
             msg.exec_()
 
     def _login(self):
-        Server.check_password(self.lineEdit_password.text())
+        Logic.check_password(self.lineEdit_password.text())
         #self.window().hide()
         self.parent.create_widget()

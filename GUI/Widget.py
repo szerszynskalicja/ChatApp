@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QFormLayout, QLineEdit, QRadio
 import os
 import time
 
-import Server
+import Logic
 
 
 class Widget(QWidget):
@@ -70,7 +70,7 @@ class Widget(QWidget):
             self.__progress_bar_actualization()
             if self.message.text():
                 self.text_box.append("you: "+self.message.text())
-                Server.send_message(bytes(self.message, "utf-8"), self.type)
+                Logic.send_message(bytes(self.message, "utf-8"), self.type)
             if self.file_path:
                 self.text_box.append("you: send a file " + str(self.file_path))
                 self.file_path = ""
