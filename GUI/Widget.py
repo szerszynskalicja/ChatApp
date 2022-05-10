@@ -29,7 +29,7 @@ class Widget(QWidget):
         button_cbc.toggled.connect(lambda: self._send_type(button_cbc))
         options_layout.addWidget(button_cbc)
         button_cbc.setChecked(True)
-        button_ebc = QRadioButton("EBC")
+        button_ebc = QRadioButton("ECB")
         button_ebc.toggled.connect(lambda: self._send_type(button_ebc))
         options_layout.addWidget(button_ebc)
         button_file = QPushButton("Add Files")
@@ -73,8 +73,8 @@ class Widget(QWidget):
             self.__progress_bar_actualization()
             if self.message.text():
                 self.text_box.append("you: "+self.message.text())
-                #Logic.send_message(bytes(self.message, "utf-8"), self.type, self.client)
-                self.client.send(self.message.text())
+                Logic.send_message(self.message.text(), self.type, self.client)
+                #self.client.send(self.message.text())
             if self.file_path:
                 self.text_box.append("you: send a file " + str(self.file_path))
                 self.file_path = ""
@@ -86,7 +86,7 @@ class Widget(QWidget):
             if button.text() == "CBC":
                 self.type = "CBC"
             else:
-                self.type = "EBC"
+                self.type = "ECB"
 
     def __create_progress_bar(self):
         self.progress_bar = QProgressBar(self)

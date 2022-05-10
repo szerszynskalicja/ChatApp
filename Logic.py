@@ -4,7 +4,7 @@ from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
 from Crypto import Random
 import main
-BUFFER_SIZE = 1024
+BUFFER_SIZE = 20
 
 def create_keys(password):
     hashed_password = hashlib.sha256(bytes(password, "utf-8")).digest()
@@ -26,7 +26,7 @@ def AES_encrypt(message, key, mode):
     plaintext = pad(message, AES.block_size)
     if mode == AES.MODE_ECB:
         cipher = AES.new(key, mode)
-        return cipher
+        return cipher.encrypt(plaintext)
     else:
         iv = Random.new().read(AES.block_size)
         cipher = AES.new(key, mode, iv)
@@ -35,46 +35,45 @@ def AES_encrypt(message, key, mode):
 
 def AES_decrypt(ciphertext, key, mode):
     if mode == AES.MODE_ECB:
-        cipher = AES.new(key, mode, ciphertext[:AES.block_size])
-        plaintext = cipher.decrypt(ciphertext[AES.block_size:])
-    else:
         cipher = AES.new(key, mode)
         plaintext = cipher.decrypt(ciphertext)
+    else:
+        cipher = AES.new(key, mode, ciphertext[:AES.block_size])
+        plaintext = cipher.decrypt(ciphertext[AES.block_size:])
     return unpad(plaintext, AES.block_size)
 
 def generate_session_key():
     main.SESSION_KEY = Random.get_random_bytes(AES.block_size)
 
+
+
 def send_message(message, mode, client):
     if mode == "CBC":
-        message_encrypted = AES_encrypt(message, main.SESSION_KEY, AES.MODE_CBC)
-        iv = message_encrypted[:AES.block_size]
+        message_encrypted = AES_encrypt(bytes(message, "utf-8"), main.SESSION_KEY, AES.MODE_CBC)
         type_mode = "0"
     else:
-        message_encrypted = AES_encrypt(message, main.SESSION_KEY, AES.MODE_EBC)
+        message_encrypted = AES_encrypt(bytes(message, "utf-8"), main.SESSION_KEY, AES.MODE_ECB)
         type_mode = "1"
     current_mess = type_mode + "0"  #for messages not files
-    current_mess += "0" #not the last one
-    current_mess += message[:BUFFER_SIZE-3]  # get first BUFFER size of message
-    message = message[BUFFER_SIZE - 3:]
-    if message:  # if message is longer than BUFFER_SIZE - 3
-        client.send(current_mess)
-        current_mess = "0"
-        current_mess += message[:BUFFER_SIZE-1]
-        while current_mess:
+    if len(message_encrypted) > BUFFER_SIZE-3:
+        current_mess += "0" #not the last one
+        mess = bytes(current_mess, 'utf-8')
+        mess += message_encrypted[:BUFFER_SIZE-3]  # get first BUFFER size of message
+        message = message_encrypted[BUFFER_SIZE-3:]
+        client.send(mess)
+        while len(message) >= BUFFER_SIZE:  # > BUFFER_SIZE - 1
+            mess = bytes("0", 'utf-8')  #not the last one
+            mess += message[:BUFFER_SIZE - 1]
+            client.send(mess)
             message = message[BUFFER_SIZE - 1:]
-            if message:
-                client.send(current_mess)
-                current_mess = "0"
-                current_mess += message[:BUFFER_SIZE-1]
-            else:
-                current_mess[0] = "1"  #the last one
-                client.send(current_mess)
-                break
+        mess = bytes("1", 'utf-8') #the last one
+        mess += message
+        client.send(mess)
     else:
-        current_mess[2] = "1"  #the last one
-        client.send(current_mess)
-            #logic with message sending TODO
+        current_mess += "1"  #the last one
+        mess = bytes(current_mess, 'utf-8')
+        mess += message_encrypted
+        client.send(mess)
 
 def check_password(password):
     hashed_password = hashlib.sha256(bytes(password, "utf-8")).digest()
