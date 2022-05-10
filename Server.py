@@ -1,6 +1,6 @@
 import socket
 import threading
-BUFFER_SIZE = 20
+BUFFER_SIZE = 1024
 
 
 class Server:
@@ -16,6 +16,7 @@ class Server:
         while True:
             data = connection.recv(BUFFER_SIZE)
             print(f"Data received from {address}")
+            print(len(data))
             for c in self.connections:
                 if c != connection:
                     c.send(data)

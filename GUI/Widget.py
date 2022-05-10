@@ -74,9 +74,10 @@ class Widget(QWidget):
             if self.message.text():
                 self.text_box.append("you: "+self.message.text())
                 Logic.send_message(self.message.text(), self.type, self.client)
-                #self.client.send(self.message.text())
+               # self.message == ""
             if self.file_path:
                 self.text_box.append("you: send a file " + str(self.file_path))
+                Logic.send_file(str(self.file_path), self.type,self.client)
                 self.file_path = ""
         else:
             self.text_box.append("Please choose a file or message to send")
