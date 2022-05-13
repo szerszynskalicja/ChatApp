@@ -62,7 +62,7 @@ def send_file(file_name, mode, client):
     if mode == "CBC":
         mode_type = AES.MODE_CBC
         current_mess = "01" # type mode CBC = 0, files =1
-        message =bytes(name, 'utf-8')
+        message = bytes(name, 'utf-8')
         message_encrypted = AES_encrypt(message, main.SESSION_KEY, mode_type)
         iv = message_encrypted[:AES.block_size]
         client.send(bytes(current_mess, 'utf-8') + message_encrypted)
@@ -99,13 +99,17 @@ def send_file(file_name, mode, client):
 
 def send_message(message, mode, client):
     if mode == "CBC":
-        message_encrypted = AES_encrypt(bytes(message, "utf-8"), main.SESSION_KEY, AES.MODE_CBC)
+        message_encrypted = AES_encrypt(bytes(message, "utf-8"), main.SESSION_KEY, AES.MODE_CBC) #first 16 bytes - vector IV
         type_mode = "0"
     else:
         message_encrypted = AES_encrypt(bytes(message, "utf-8"), main.SESSION_KEY, AES.MODE_ECB)
         type_mode = "1"
+    ######################################################################
+    ###Do zapełniania pasku postępu w tym miejscu trzeba by wyliczyć długość wiadomości
+    ####i zgodnie z kolejnymi przesyłanymi częściami zapełniać pasek
+    ####
     current_mess = type_mode + "0"  #for messages not files
-    if len(message_encrypted) > BUFFER_SIZE-3:
+    if len(message_encrypted) > BUFFER_SIZE-3: #message has to be divided
         current_mess += "0" #not the last one
         mess = bytes(current_mess, 'utf-8')
         mess += message_encrypted[:BUFFER_SIZE-3]  # get first BUFFER size of message
@@ -119,7 +123,7 @@ def send_message(message, mode, client):
         mess = bytes("1", 'utf-8') #the last one
         mess += message
         client.send(mess)
-    else:
+    else: ### message will be send in one buffer
         current_mess += "1"  #the last one
         mess = bytes(current_mess, 'utf-8')
         mess += message_encrypted
