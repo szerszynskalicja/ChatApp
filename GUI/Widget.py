@@ -70,14 +70,13 @@ class Widget(QWidget):
     def send_mess(self):
         # message or text to sent is chosen
         if self.message.text() or self.file_path:
-            self.__progress_bar_actualization()
             if self.message.text():
                 self.text_box.append("you: "+self.message.text())
-                Logic.send_message(self.message.text(), self.type, self.client)
+                Logic.send_message(self.message.text(), self.type, self.client, self)
                # self.message == ""
             if self.file_path:
                 self.text_box.append("you: send a file " + str(self.file_path))
-                Logic.send_file(str(self.file_path), self.type,self.client)
+                Logic.send_file(str(self.file_path), self.type,self.client, self)
                 self.file_path = ""
         else:
             self.text_box.append("Please choose a file or message to send")
@@ -92,8 +91,7 @@ class Widget(QWidget):
     def __create_progress_bar(self):
         self.progress_bar = QProgressBar(self)
         self.progress_bar.setGeometry(10, 340, 200, 25)
+        self.progress_bar.setValue(0)
 
-    def __progress_bar_actualization(self):
-        for i in range(101):
-            time.sleep(0.01)
-            self.progress_bar.setValue(i)
+    def progress_bar_actualization(self, value):
+        self.progress_bar.setValue(value)

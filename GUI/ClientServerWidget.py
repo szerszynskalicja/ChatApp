@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QWidget, QGridLayout, QMessageBox, QLineEdit,  QPush
 import socket
 
 class ClientServerWidget(QWidget):
-    def __init__(self, parent=None, client=None):
+    def __init__(self, parent=None, client=None, password=None):
         super().__init__()
         self.layout = QGridLayout()
         self._create_widgets()

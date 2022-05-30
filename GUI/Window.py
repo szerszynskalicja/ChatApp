@@ -11,18 +11,19 @@ class Window(QMainWindow):
         super().__init__(parent)
         self.setWindowTitle("Chat App")
         self.resize(400, 400)
-        self.client = Client.Client()
+        self.password = None
+        self.client = Client.Client(self.password)
         self._create_menu_bar()
-        self._widget = GenKeyWidget(self, self.client)
-        self.setCentralWidget(self._widget)
+        self.widget = GenKeyWidget(self, self.client)
+        self.setCentralWidget(self.widget)
 
     def create_main_widget(self):
-        self._widget = Widget(self, self.client)
-        self.setCentralWidget(self._widget)
+        self.widget = Widget(self, self.client)
+        self.setCentralWidget(self.widget)
 
     def create_s_c_widget(self):
-        self._widget = ClientServerWidget(self, self.client)
-        self.setCentralWidget(self._widget)
+        self.widget = ClientServerWidget(self, self.client)
+        self.setCentralWidget(self.widget)
 
     def _create_menu_bar(self):
         menu_bar = QMenuBar(self)

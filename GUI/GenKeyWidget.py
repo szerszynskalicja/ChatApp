@@ -13,7 +13,7 @@ class GenKeyWidget(QWidget):
         self.setLayout(self.layout)
 
     def _create_widgets(self):
-        if os.path.isfile('./privateKey.key') and os.path.isfile('./publicKey.key'):
+        if os.path.isfile('./privateKey.pem') and os.path.isfile('./publicKey.pem'):
             self.lineEdit_password = QLineEdit()
             self.lineEdit_password.setPlaceholderText('Please enter your Password')
             self.layout.addWidget(self.lineEdit_password, 0, 0)
@@ -34,9 +34,10 @@ class GenKeyWidget(QWidget):
 
     def _check_password(self):
         if self.lineEdit_password.text() == self.lineEdit_password2.text():
-            Logic.create_keys(self.lineEdit_password.text())
+            Logic.create_keys(self.lineEdit_password.text(), './')
             # switch to message window
             #self.window().hide()
+            self.parent.client.password = self.lineEdit_password.text()
             self.parent.create_s_c_widget()
         else:
             msg = QMessageBox()
@@ -46,4 +47,5 @@ class GenKeyWidget(QWidget):
     def _login(self):
         Logic.check_password(self.lineEdit_password.text())
         #self.window().hide()
+        self.parent.client.password = self.lineEdit_password.text()
         self.parent.create_s_c_widget()
