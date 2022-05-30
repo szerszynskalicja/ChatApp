@@ -5,10 +5,9 @@ import socket
 import threading
 
 from Crypto.PublicKey import RSA
-from Crypto.Cipher import AES, PKCS1_OAEP
+from Crypto.Cipher import AES
 
 import Logic
-import main
 
 PLAINTEXT_SIZE = 2
 CIPHER_LEN = 128
@@ -100,9 +99,7 @@ class Client:
     def diffie_hellman(self):
         tmp = str(self.sock.recv(1), 'utf-8')
         if tmp[0] == 'j':
-            self.session_key = int(str(self.sock.recv(BUFFER_SIZE), 'utf-8'))
-            print(self.session_key)
-            self.session_key.to_bytes(AES.block_size, byteorder='big')
+            self.session_key = self.sock.recv(AES.block_size)
         elif tmp[0] == 'n':
             self.session_key_exchange()
             A = (Q ** self.a) % P
@@ -111,7 +108,6 @@ class Client:
             cipher = Logic.RSA_encrypt(A, public_key)
             self.send(cipher)
             B = self.sock.recv(CIPHER_LEN)
-            #private_key = Logic.get_rsa_keys('privateKey.pem')
             with open('privateKey.pem', 'rb') as f:
                 private_key = f.read()
                 hash_pass = hashlib.sha256(bytes(self.password, "utf-8")).digest()

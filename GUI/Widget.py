@@ -40,7 +40,7 @@ class Widget(QWidget):
 
     def __browse_file(self):
         file_path = os.path.abspath(os.getcwd())
-        file_window = QFileDialog.getOpenFileName(self, "Open File", file_path, 'Images (*.png *.jpg);;Text files (*.txt *.pdf);; Videos (*.avi)')
+        file_window = QFileDialog.getOpenFileName(self, "Open File", file_path, 'Images (*.png *.jpg);;Text files (*.txt *.pdf);; Videos (*.avi, *.mp4)')
         previous_path = self.file_path
         self.file_path = file_window[0]
         if self.file_path:

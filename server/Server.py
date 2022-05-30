@@ -28,7 +28,7 @@ class Server:
     def diffie_hellman(self, connection):
         if self.s:
             connection.send(bytes("j", "utf-8"))
-            connection.send(bytes(str(self.s), "utf-8"))
+            connection.send(self.s)
         else:
             connection.send(bytes("n", "utf-8"))
             self.session_key_exchange(connection)
